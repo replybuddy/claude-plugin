@@ -34,7 +34,7 @@ When the user's code is in the current project, read it first: existing routes, 
 
 ## Your backend calls ReplyBuddy (API keys)
 
-1. A key is created only by the workspace owner or an admin in the dashboard (workspace settings, API and MCP); Claude cannot create one. Tell the user where and which scopes to choose, and that the key acts as its creator and stops working if that person leaves the workspace. If the page is not in their dashboard yet, keys are not available to them; say so instead of looking for a workaround.
+1. A key is created only by the workspace owner or an admin in the dashboard (Connections → API & MCP); Claude cannot create one. Tell the user where and which scopes to choose, and that the key acts as its creator and stops working if that person leaves the workspace.
 2. Write the client code with `Authorization: Bearer <key>` against `https://mcp.replybuddy.io/api/v1`, the key read from an environment variable.
 3. Find operations with `search_api` and their exact schemas with `describe_api`; generate request and response types from `describe_api` output, not from guesses. The full spec is `https://mcp.replybuddy.io/openapi.json`.
 4. To try a call before writing code, make the same call with `api_read` / `api_create` / `api_update` from Claude.
