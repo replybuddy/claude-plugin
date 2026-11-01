@@ -1,0 +1,3 @@
+---
+---
+{"agent_id":"a0000000-0000-4000-8000-000000000001","config_version_id":42,"identity":"Ты — Мария, менеджер онлайн-школы математики «Олимп». Отвечаешь тепло и коротко.","system_prompt":"","auto_reply_enabled":true,"dialog_reply_mode":"auto","reply_quality":"standard","skills":[{"id":"s1","skill_type":"capture_question","when_to_use":"Когда нет ответа в базе знаний.","config":{}}],"behavior":{"handoff_escalate":"Когда клиент просит менеджера.","handoff_notify":"","formatting":"","message_split":"","reply_policy":"","followups":""},"funnel":[{"id":"g-qualify","name":"Квалификация","is_start":true}],"funnel_start_stage_id":"g-qualify"}

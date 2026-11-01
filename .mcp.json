@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "replybuddy": {
+      "type": "http",
+      "url": "https://mcp.replybuddy.io/mcp"
+    }
+  }
+}

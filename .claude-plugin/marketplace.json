@@ -1,0 +1,17 @@
+{
+  "name": "replybuddy",
+  "owner": {
+    "name": "ReplyBuddy",
+    "email": "support@replybuddy.io"
+  },
+  "metadata": {
+    "description": "The official ReplyBuddy plugin for Claude."
+  },
+  "plugins": [
+    {
+      "name": "replybuddy",
+      "source": "./",
+      "description": "Set up and debug a ReplyBuddy AI sales agent and its CRM, and connect it to your own backend."
+    }
+  ]
+}
