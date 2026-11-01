@@ -32,7 +32,7 @@ You need a ReplyBuddy account with access to a workspace. Setup changes need the
 **Claude Code**
 
 ```
-/plugin marketplace add replybuddy/replybuddy-claude-plugin
+/plugin marketplace add replybuddy/claude-plugin
 /plugin install replybuddy@replybuddy
 ```
 

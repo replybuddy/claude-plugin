@@ -9,10 +9,10 @@
     "url": "https://replybuddy.io"
   },
   "homepage": "https://replybuddy.io",
-  "repository": "https://github.com/replybuddy/replybuddy-claude-plugin",
+  "repository": "https://github.com/replybuddy/claude-plugin",
   "license": "MIT",
   "keywords": ["replybuddy", "ai-agent", "crm", "messenger", "telegram", "webhooks", "sales"],
-  "documentationUrl": "https://github.com/replybuddy/replybuddy-claude-plugin#readme",
+  "documentationUrl": "https://github.com/replybuddy/claude-plugin#readme",
   "supportUrl": "mailto:support@replybuddy.io",
   "privacyPolicyUrl": "https://replybuddy.io/legal/en/PrivacyPolicy.html",
   "termsOfServiceUrl": "https://replybuddy.io/legal/en/TermsOfService.html"
