@@ -2,12 +2,12 @@
 
 Three cases, each with its own mocks of the ReplyBuddy MCP server (`<case>/mocks/replybuddy/<tool>.md`), so no real workspace or sign-in is needed. Tool schemas (`_tools.json`) and `search_api` / `describe_api` answers are recorded from the live server; workspace data in the mocks is made up.
 
-Mocks answer the same way for any path, because the CLI substitutes `{input.x}` into a fixture name only as a single segment without slashes. A wrong path therefore gets a normal answer instead of a 404, and graders check the path. Mocks do not serve the server's instructions.
+Fixed mocks answer the same way for any path, because the CLI substitutes `{input.x}` into a fixture name only as a single segment without slashes. A wrong path therefore gets a normal answer instead of a 404, and graders check the path. `set-start-goal` re-reads what it wrote, so its graph tools are one `_server.md` agent mock that keeps state. Mocks do not serve the server's instructions.
 
 | Case | Checks |
 |---|---|
 | `diagnose-silent-conversation` | Finds that a dialog is silent because it was switched to an operator, and changes nothing |
-| `set-start-goal` | Reads the goal graph before `replace_goal_graph` and keeps the existing edges |
+| `set-start-goal` | Reads the goal graph before `replace_goal_graph`, keeps the existing edges and reports the change as done |
 | `webhook-for-deal-moves` | Creates the endpoint with `create_webhook_endpoint` for `deal.moved` only, sends a test delivery and explains signature checks |
 
 ## Run
