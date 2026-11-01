@@ -36,7 +36,7 @@ You need a ReplyBuddy account with access to a workspace. Setup changes need the
 /plugin install replybuddy@replybuddy
 ```
 
-Then run `/mcp`, choose `plugin:replybuddy:replybuddy` and sign in. On the ReplyBuddy consent screen pick the workspace and the access level.
+Then run `/mcp`, choose `plugin:replybuddy:replybuddy` and sign in. On the ReplyBuddy consent screen tick the workspaces Claude may use and choose the access level.
 
 **claude.ai and Claude Desktop**
 
@@ -48,7 +48,7 @@ Any MCP client can connect to `https://mcp.replybuddy.io/mcp` directly. For a co
 
 ## How it works
 
-- One connection is bound to one workspace, chosen at sign-in. Claude never passes workspace ids.
+- A connection covers only the workspaces you tick at sign-in. With one workspace Claude never passes a workspace id; with several, each call names the workspace it runs in.
 - About 65 typed tools cover agent setup, the inbox, contacts, the CRM and testing. Every other operation of the ReplyBuddy REST API is reachable through `search_api` → `describe_api` → `api_read` / `api_create` / `api_update` / `api_delete`. The API reference is `https://mcp.replybuddy.io/openapi.json`.
 - Read tools run without asking. Claude asks before every destructive or outward-facing action: sending messages and broadcasts, replacing whole sets, deleting, creating a webhook endpoint, sending a test request to your API.
 - Connecting messenger channels, managing members, creating API keys and deleting a workspace are possible only in the ReplyBuddy dashboard.

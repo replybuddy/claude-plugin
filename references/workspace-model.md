@@ -1,6 +1,6 @@
 # How a ReplyBuddy workspace is put together
 
-A **workspace** is one AI agent together with its messenger channels, contacts, inbox and CRM. One MCP connection is bound to one workspace, chosen on the consent screen when you sign in. Tools never take a workspace or agent id: the server fills it in from the token.
+A **workspace** is one AI agent together with its messenger channels, contacts, inbox and CRM. One MCP connection covers the workspaces ticked on the consent screen when you sign in. With one workspace, tools take no workspace or agent id: the server fills it in from the token. With several, call `list_workspaces` and pass the chosen id as `agent_id`. If the request does not make clear which workspace it is about, ask the user before changing anything.
 
 ## What the agent's reply is built from
 

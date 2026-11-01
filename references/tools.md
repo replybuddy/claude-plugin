@@ -1,6 +1,6 @@
 # Tools of the ReplyBuddy MCP server
 
-Server: `https://mcp.replybuddy.io/mcp` (all tools) or `https://mcp.replybuddy.io/mcp/readonly` (read tools only). Sign-in is OAuth 2.1; the consent screen picks the workspace and the access level (`read`, or `read` + `write`). Your MCP client shows the current tool list with descriptions and schemas.
+Server: `https://mcp.replybuddy.io/mcp` (all tools) or `https://mcp.replybuddy.io/mcp/readonly` (read tools only). Sign-in is OAuth 2.1; the consent screen picks the workspaces and the access level (`read`, or `read` + `write`). Your MCP client shows the current tool list with descriptions and schemas.
 
 ## Two layers
 
@@ -34,6 +34,10 @@ Every tool is marked as read, write or destructive:
 | Sandbox | `api_read /agents/{id}/sandbox/state`, `api_create /agents/{id}/sandbox/regenerate`, `api_create /agents/{id}/sandbox/messages/{msg_id}/save-as-test` |
 | Broadcast drafts | `api_read /agents/{id}/agent-broadcasts`, `api_create /agents/{id}/agent-broadcasts`, `api_update /agents/{id}/agent-broadcasts/{bid}`, then the typed `schedule_broadcast` or `send_broadcast` |
 | Webhooks | see [webhooks.md](webhooks.md) |
-| Session | `api_read /mcp/session` (workspace id and name, scopes, token expiry) |
+| Session | `api_read /mcp/session` (workspace id and name, scopes, token expiry; with several workspaces, `agents` lists them) |
 
-Under `/agents/{id}` the connected workspace is used whatever id you pass.
+Under `/agents/{id}` the workspace of the call is used whatever id you pass.
+
+## Connections with several workspaces
+
+A connection may cover several workspaces. It then has `list_workspaces` (id, name and your role in each), and every tool except `list_workspaces`, `search_api` and `describe_api` requires `agent_id`, set to one of those ids. Any other id gets `auth.access_denied`. A connection with one workspace has neither `list_workspaces` nor `agent_id`.

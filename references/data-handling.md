@@ -17,7 +17,7 @@ What ReplyBuddy returns to Claude becomes part of your conversation with Claude 
 
 ## Access
 
-- The connection is bound to one workspace, chosen on the consent screen, and acts with your role in it.
+- The connection covers only the workspaces you tick on the consent screen, and acts with your role in each. The access level applies to all of them, and revoking the connection removes access to all of them. With several workspaces, Claude can see data from all of them in one conversation, including client messages: tick only the ones you need.
 - On the consent screen you grant `read`, or `read` and `write`. Connect to `https://mcp.replybuddy.io/mcp/readonly` for a connection that can never change anything.
 - Access tokens expire after 1 hour, refresh tokens after 30 days. Connected apps can be revoked in the dashboard (workspace settings, **API and MCP**). This page is being rolled out; until it appears in your workspace, ask support@replybuddy.io to revoke a connection.
 - No token can connect channels, manage members, create API keys or delete a workspace.
