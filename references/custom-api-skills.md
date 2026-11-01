@@ -37,11 +37,11 @@ Rules the server checks:
 
 ## Secrets
 
-Responses mask secrets as `******`. On `update_skill`, send `******` or leave a secret out to keep the stored value; send a new value to replace it. Send every tool of the skill on update with its `name` unchanged (and its `id` when `list_skills` shows one): a stored secret is matched to its tool by `id`, then by `name`. Delete a skill with `api_delete /skills/{id}`. ReplyBuddy stores the secrets and uses them only to call the tool's URL; they never come back through the API.
+Responses mask secrets as `******`. On `update_skill`, send `******` or leave a secret out to keep the stored value while the URL keeps its scheme and host; send a new value to replace it. A stored secret never moves to another host: after changing the host, send the secret again or the call fails with 422 `skill.invalid_config`. Send every tool of the skill on update with its `name` unchanged (and its `id` when `list_skills` shows one): a stored secret is matched to its tool by `id`, then by `name`. Delete a skill with `api_delete /skills/{id}`. ReplyBuddy stores the secrets and uses them only to call the tool's URL; they never come back through the API.
 
 ## Testing a tool
 
-`test_custom_api_tool` sends one real request through a tool of a saved skill and returns the status, headers and body. Pass the skill `id`, the tool object as `connect_skill` or `list_skills` returned it (you may edit it before the test) and sample `arguments`. A `502 skill.test_request_failed` means the request did not get an answer from your API (DNS, TLS, timeout, or the address is not allowed); it is not a ReplyBuddy outage. Masked secrets are restored on the server. Private and internal addresses are refused; the limit is 20 calls per minute.
+`test_custom_api_tool` sends one real request through a tool of a saved skill and returns the status, headers and body. Pass the skill `id`, the tool object as `connect_skill` or `list_skills` returned it (you may edit it before the test) and sample `arguments`. A `502 skill.test_request_failed` means the request did not get an answer from your API (DNS, TLS, timeout, or the address is not allowed); it is not a ReplyBuddy outage. Masked secrets are restored on the server while the URL keeps the stored scheme and host. Private and internal addresses are refused; the limit is 20 calls per minute.
 
 This is a real request to your API: test against a read-only endpoint or a staging backend when the call changes data.
 

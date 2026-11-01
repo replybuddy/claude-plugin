@@ -31,4 +31,4 @@ Two different things are both called "funnel" in the product:
 
 ## What only the dashboard does
 
-Connecting messenger channels (Telegram, Instagram, VK, Avito, MAX, Zalo), inviting members, creating API keys and deleting the workspace are done in the ReplyBuddy dashboard at https://replybuddy.io. No MCP token can reach these operations.
+Connecting messenger channels (Telegram, Instagram, Avito, MAX, Zalo), inviting members, creating API keys and deleting the workspace are done in the ReplyBuddy dashboard at https://replybuddy.io. No MCP token can reach these operations.
