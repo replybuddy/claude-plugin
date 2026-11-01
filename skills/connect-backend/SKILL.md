@@ -22,7 +22,7 @@ When the user's code is in the current project, read it first: existing routes, 
 3. `connect_skill` with `skill_type: "custom_api"`, a `when_to_use` that says in which client situations to call it, and `is_enabled: false` while testing.
 4. `test_custom_api_tool` with the skill `id`, the tool object from the `connect_skill` response and sample `arguments`. It sends one real request: use a read-only endpoint or a staging backend for anything that changes data, and say so before calling it. Fix the URL, parameters or auth until the status and body are right. `502 skill.test_request_failed` means no answer came from the business API; check that the URL is public and reachable.
 5. `toggle_skill` to enable it, then check with the `test-agent` skill that the agent calls the tool when it should. The `thinking` field of the sandbox reply shows the call. Sandbox calls of a `custom_api` tool are real requests, like `test_custom_api_tool`.
-6. To change a tool later, `update_skill` with all tools of the skill, their names unchanged and secrets sent as `******` (or left out) to keep them. Remove a skill with `api_delete /skills/{id}`.
+6. To change a tool later, `update_skill` with all tools of the skill, their names unchanged and secrets sent as `******` (or left out) to keep them. A secret stays with its host: when the URL moves to another host, ask the user for the secret again. Remove a skill with `api_delete /skills/{id}`.
 
 ## ReplyBuddy notifies your backend (webhooks)
 
@@ -34,7 +34,7 @@ When the user's code is in the current project, read it first: existing routes, 
 
 ## Your backend calls ReplyBuddy (API keys)
 
-1. A key is created only by the workspace owner or an admin in the dashboard (workspace settings, API and MCP); Claude cannot create one. Tell the user where and which scopes to choose, and that the key acts as its creator and stops working if that person leaves the workspace. If the page is not in their dashboard yet, keys are not available to them; say so instead of looking for a workaround.
+1. A key is created only by the workspace owner or an admin in the dashboard (Connections → API & MCP); Claude cannot create one. Tell the user where and which scopes to choose, and that the key acts as its creator and stops working if that person leaves the workspace.
 2. Write the client code with `Authorization: Bearer <key>` against `https://mcp.replybuddy.io/api/v1`, the key read from an environment variable.
 3. Find operations with `search_api` and their exact schemas with `describe_api`; generate request and response types from `describe_api` output, not from guesses. The full spec is `https://mcp.replybuddy.io/openapi.json`.
 4. To try a call before writing code, make the same call with `api_read` / `api_create` / `api_update` from Claude.
