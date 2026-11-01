@@ -1,0 +1,177 @@
+{
+  "tools": [
+    {
+      "name": "api_read",
+      "description": "Call a GET operation of the ReplyBuddy REST API that has no dedicated tool. Reference: the ReplyBuddy REST API, https://mcp-dev.replybuddy.io/openapi.json.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "description": "Operation path with real IDs, without /api/v1, e.g. /deals/3f2a9c1e-0000-0000-0000-000000000000. Under /agents/{id} the connected workspace is used whatever id is passed.",
+            "type": "string"
+          },
+          "query": {
+            "additionalProperties": {
+              "items": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              },
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "array"
+              ]
+            },
+            "description": "Query parameters by name, as describe_api lists them.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "describe_api",
+      "description": "Describe one ReplyBuddy REST API operation: path parameters, query parameters and body as JSON Schema, and the response schema. Pass method and path as search_api returned them. Reference: the ReplyBuddy REST API, https://mcp-dev.replybuddy.io/openapi.json.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "method": {
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ],
+            "type": "string"
+          },
+          "path": {
+            "description": "Operation path template, e.g. /deals/{id}.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "method",
+          "path"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_workspace_snapshot",
+      "description": "Get the agent configuration exactly as the AI runtime receives it: identity, behavior, reply mode, enabled skills with secrets masked, conversation goals and QA counters.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_goals",
+      "description": "List conversation goals.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object"
+      }
+    },
+    {
+      "name": "replace_goal_graph",
+      "description": "Replace the goal graph and start_stage_id. The AI runtime does not walk the edges; goals are taken up by when_to_enter. Use this when setting the start goal or rewriting the whole graph.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "layout": {
+            "additionalProperties": {
+              "properties": {
+                "x": {
+                  "description": "Canvas X coordinate.",
+                  "type": "number"
+                },
+                "y": {
+                  "description": "Canvas Y coordinate.",
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ],
+              "type": "object"
+            },
+            "description": "Canvas position by goal UUID.",
+            "type": "object"
+          },
+          "start_stage_id": {
+            "description": "Start goal UUID, or null.",
+            "type": "string"
+          },
+          "transitions": {
+            "description": "Graph edges.",
+            "items": {
+              "properties": {
+                "condition": {
+                  "description": "Transition condition. Empty means always.",
+                  "type": "string"
+                },
+                "from_stage_id": {
+                  "description": "Source goal UUID.",
+                  "type": "string"
+                },
+                "sort_order": {
+                  "description": "Edge order.",
+                  "type": "integer"
+                },
+                "to_stage_id": {
+                  "description": "Target goal UUID.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "condition",
+                "from_stage_id",
+                "sort_order",
+                "to_stage_id"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "layout",
+          "transitions"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "search_api",
+      "description": "Search the ReplyBuddy REST API operations this connection may call, by keywords such as \"deal fields\" or \"reorder goals\". Returns method, path, summary, whether the call reads or writes, and the dedicated tool when there is one. Reference: the ReplyBuddy REST API, https://mcp-dev.replybuddy.io/openapi.json.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "description": "Results to return, 10 by default.",
+            "maximum": 25,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "Keywords in English.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      }
+    }
+  ]
+}
