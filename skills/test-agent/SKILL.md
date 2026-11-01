@@ -21,7 +21,7 @@ Two tools for two jobs:
 
 A good answer worth keeping becomes a test case with `api_create /agents/{id}/sandbox/messages/{msg_id}/save-as-test` (the `msg_id` of the `ai` message). It stores the reply word for word as `expected_answer`; rewrite that as criteria with `api_update /agent-tests/{id}` (see below).
 
-In `/agents/{id}/…` paths any id works: the server uses the connected workspace (its id is `agent_id` in `get_workspace_snapshot`).
+In `/agents/{id}/…` paths any id works: the server uses the workspace of the call (its id is `agent_id` in `get_workspace_snapshot`).
 
 ## Test cases
 
