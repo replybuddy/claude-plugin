@@ -4,7 +4,7 @@ An API key gives a server, a CI job or a headless agent access to one workspace 
 
 ## Creating a key
 
-Only the workspace owner or an admin creates keys, in the ReplyBuddy dashboard (workspace settings, **API and MCP**). Claude cannot create, list or revoke keys: these routes are closed to every MCP token and key, so a token can never mint another token.
+Only the workspace owner or an admin creates keys, in the ReplyBuddy dashboard (workspace settings, **API and MCP**). This page is being rolled out; until it appears in your workspace, keys cannot be created and integrations use the OAuth sign-in. Claude cannot create, list or revoke keys: these routes are closed to every MCP token and key, so a token can never mint another token.
 
 When creating a key you choose:
 
@@ -38,4 +38,4 @@ claude mcp add --transport http replybuddy https://mcp.replybuddy.io/mcp \
   --header "Authorization: Bearer $REPLYBUDDY_API_KEY"
 ```
 
-Revoking a key in the dashboard stops data calls at once; the tool list may still be served for up to 60 seconds.
+Revoking a key stops data calls at once; the tool list may still be served for up to 60 seconds.
