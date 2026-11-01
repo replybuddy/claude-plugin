@@ -1,6 +1,6 @@
 # ReplyBuddy plugin for Claude
 
-[ReplyBuddy](https://replybuddy.io) is an AI agent that answers clients in messengers (Telegram, Instagram, VK, Avito, MAX, Zalo) and has a built-in CRM. This plugin lets you set up, test and debug that agent from Claude, and connect it to your own backend, without clicking through the dashboard.
+[ReplyBuddy](https://replybuddy.io) is an AI agent that answers clients in messengers (Telegram, Instagram, MAX, Avito, Zalo) and has a built-in CRM. This plugin lets you set up, test and debug that agent from Claude, and connect it to your own backend, without clicking through the dashboard.
 
 It adds the ReplyBuddy MCP server (`https://mcp.replybuddy.io/mcp`) and five skills that teach Claude how to use it well.
 
