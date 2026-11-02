@@ -50,7 +50,7 @@ Any MCP client can connect to `https://mcp.replybuddy.io/mcp` directly. For a co
 
 - A connection covers only the workspaces you tick at sign-in. With one workspace Claude never passes a workspace id; with several, each call names the workspace it runs in.
 - About 65 typed tools cover agent setup, the inbox, contacts, the CRM and testing. Every other operation of the ReplyBuddy REST API is reachable through `search_api` → `describe_api` → `api_read` / `api_create` / `api_update` / `api_delete`. The API reference is `https://mcp.replybuddy.io/openapi.json`.
-- Read tools run without asking. Claude asks before every destructive or outward-facing action: sending messages and broadcasts, replacing whole sets, deleting, creating a webhook endpoint, sending a test request to your API.
+- Read tools run without asking. By default Claude asks before every destructive or outward-facing action: sending messages and broadcasts, replacing whole sets, deleting, creating a webhook endpoint, sending a test request to your API. [You can turn this off](references/tools.md#running-without-confirmations) in your Claude client.
 - Connecting messenger channels, managing members, creating API keys and deleting a workspace are possible only in the ReplyBuddy dashboard.
 
 Details: [workspace model](references/workspace-model.md), [tools](references/tools.md), [errors and limits](references/errors-and-limits.md), [webhooks](references/webhooks.md), [API keys](references/api-keys.md), [custom_api skills](references/custom-api-skills.md).

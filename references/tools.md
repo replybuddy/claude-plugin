@@ -17,6 +17,15 @@ Every tool is marked as read, write or destructive:
 - **write** tools change data in a way you can undo inside ReplyBuddy (create, update, assign, move, toggle, restore); you can allow them once or always;
 - **destructive** tools are irreversible or reach people and systems outside ReplyBuddy; Claude asks before each call. These are every `api_delete` call, tools that replace a whole set (`replace_*`, `update_deal_funnel_config`, `reset_deal_funnel_stages`, `sandbox_reset`), tools that write to clients (`send_message`, `resend_message`, broadcasts) and tools that send data to your systems (`create_webhook_endpoint`, `test_custom_api_tool`).
 
+The markers describe the tools. Whether to ask is up to your Claude client, and you can turn the questions off.
+
+### Running without confirmations
+
+- **Claude Code:** add `"mcp__plugin_replybuddy_replybuddy__*"` to `permissions.allow` in your settings. For a server you added yourself, write `mcp__<server name>__*`.
+- **Claude.ai and Claude Desktop:** set the tool permissions in the connector settings.
+
+Claude then sends messages and broadcasts to real clients and deletes data without asking. Use a read-only connection where you do not want that.
+
 ## Frequent generic calls
 
 | Task | Call |

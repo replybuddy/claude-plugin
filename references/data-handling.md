@@ -11,7 +11,7 @@ The plugin itself contains only instructions (Markdown) and one server address (
 | Claude → ReplyBuddy | The changes you ask for: settings, knowledge, QA, goals, skills, CRM records, messages to clients, broadcasts | Write and destructive tools; Claude asks before destructive ones |
 | ReplyBuddy → your API | Requests from `custom_api` skills while the agent talks to clients, and one request per `test_custom_api_tool` call | Only to URLs you configured |
 | ReplyBuddy → your webhook URL | Signed event POSTs, including the text of incoming client messages | Only for endpoints you created |
-| ReplyBuddy → clients' messengers | Messages and broadcasts | Only for `send_message`, `resend_message`, `schedule_broadcast`, `send_broadcast`, and the agent's own replies |
+| ReplyBuddy → clients' messengers | Messages and broadcasts | For `send_message`, `resend_message`, `schedule_broadcast`, `send_broadcast`, the agent's own replies, and marketing rules and lead forms you create, which then message clients on their own |
 
 What ReplyBuddy returns to Claude becomes part of your conversation with Claude and is handled under your agreement with Anthropic. Ask Claude for aggregates or a few records when you do not need full client data.
 
