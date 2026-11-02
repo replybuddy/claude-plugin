@@ -31,11 +31,14 @@ Rules the server checks:
 - `when_to_use` is required: the agent decides from it whether to use the skill at all.
 - Tool `name` and parameter `name` are snake_case. A tool name is unique across all `custom_api` skills of the workspace.
 - Every `{placeholder}` in `url` needs a parameter with that name and `location: "path"`. Other locations: `query`, `body`, `header`.
+- A `{placeholder}` goes in the path or query, never in the host. A URL with `user:password@` is refused; use `authentication` instead.
 - `dataType`: `string` (default), `number`, `boolean`. `required` defaults to `true`.
 - `authentication`: `none` (default), `bearer` (`bearerToken`), `api_key` (`apiKeyHeader`, default `X-Api-Key`, and `apiKeyValue`), `basic` (`basicUsername`, `basicPassword`). Constant headers go to `fixedHeaders: [{"name", "value"}]`.
 - JSON keys inside a tool are camelCase (`bearerToken`, `dataType`, `fixedHeaders`).
 
 ## Secrets
+
+Keep secrets only in `bearerToken`, `apiKeyValue` and `basicPassword`. `fixedHeaders` and the URL are ordinary settings, returned as written.
 
 Responses mask secrets as `******`. On `update_skill`, send `******` or leave a secret out to keep the stored value while the URL keeps its scheme and host; send a new value to replace it. A stored secret never moves to another host: after changing the host, send the secret again or the call fails with 422 `skill.invalid_config`. Send every tool of the skill on update with its `name` unchanged (and its `id` when `list_skills` shows one): a stored secret is matched to its tool by `id`, then by `name`. Delete a skill with `api_delete /skills/{id}`. ReplyBuddy stores the secrets and uses them only to call the tool's URL; they never come back through the API.
 
