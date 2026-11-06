@@ -38,6 +38,15 @@ You need a ReplyBuddy account with access to a workspace. Setup changes need the
 
 Then run `/mcp`, choose `plugin:replybuddy:replybuddy` and sign in. On the ReplyBuddy consent screen tick the workspaces Claude may use and choose the access level.
 
+**Codex**
+
+```
+codex plugin marketplace add replybuddy/claude-plugin
+codex plugin add replybuddy@replybuddy
+```
+
+Then run `codex mcp login replybuddy` and sign in. On the consent screen tick the workspaces Codex may use and choose the access level.
+
 **claude.ai and Claude Desktop**
 
 Install the plugin from the directory. Until it is listed there, add the connector `https://mcp.replybuddy.io/mcp` under Settings → Connectors and upload a zip of this repository under Customize → Plugins for the skills.

@@ -1,0 +1,35 @@
+{
+  "name": "replybuddy",
+  "version": "0.1.5",
+  "description": "Set up and debug a ReplyBuddy AI sales agent and its CRM: profile, knowledge, QA, goals, deal funnels, sandbox tests, and integrations with your own backend through custom API skills, signed webhooks and API keys.",
+  "author": {
+    "name": "ReplyBuddy",
+    "email": "support@replybuddy.io",
+    "url": "https://replybuddy.io"
+  },
+  "homepage": "https://replybuddy.io",
+  "repository": "https://github.com/replybuddy/claude-plugin",
+  "license": "MIT",
+  "keywords": ["replybuddy", "ai-agent", "crm", "messenger", "telegram", "webhooks", "sales"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "ReplyBuddy",
+    "shortDescription": "AI sales agent for messengers",
+    "longDescription": "ReplyBuddy is an AI agent that answers clients in messengers (Telegram, Instagram, MAX, Avito and Zalo), with a CRM built around it. This plugin connects the ReplyBuddy workspaces you choose, so you can set up the agent, check how it answers, find out why it answered the way it did, and work with its dialogs, contacts and deals. Five skills cover agent setup, sandbox testing, reply diagnosis, deal funnels, and integrations with your own backend through custom API skills, signed webhooks and API keys. You sign in with OAuth and pick the workspaces and the access level: read only, or read and write. Messenger channels are connected only in the ReplyBuddy dashboard.",
+    "developerName": "ReplyBuddy",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://replybuddy.io",
+    "supportURL": "mailto:support@replybuddy.io",
+    "privacyPolicyURL": "https://replybuddy.io/legal/en/PrivacyPolicy.html",
+    "termsOfServiceURL": "https://replybuddy.io/legal/en/TermsOfService.html",
+    "defaultPrompt": [
+      "Show how my ReplyBuddy agent is set up and what goals it has",
+      "Why did the agent answer this client the way it did yesterday?",
+      "Run the saved test cases and tell me what broke"
+    ],
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png"
+  }
+}
