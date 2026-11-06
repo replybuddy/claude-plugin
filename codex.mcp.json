@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "replybuddy": {
+      "type": "streamable-http",
+      "url": "https://mcp.replybuddy.io/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "oauth",
+            "client": {
+              "mode": "dcr"
+            }
+          }
+        }
+      }
+    }
+  }
+}
