@@ -17,6 +17,7 @@ A failed call is an ordinary tool result with `isError: true` and this text:
 | `deal.invalid_config` (422) | A deal stage, funnel or reorder body does not match the stored funnel (for reorder: not exactly the current open stages) | Read the funnel again and rebuild the body |
 | `deal.amount_out_of_range` (422) | The deal `amount` is outside 0 to 999999999999.99 | Ask the user for the correct amount |
 | `skill.test_request_failed` (502) | `test_custom_api_tool` got no answer from your API | Check that the URL is public, resolves and answers over TLS |
+| `skill.secret_in_dashboard` (422) | A key, token or password was sent through this connection | Save the skill without it and ask the user to enter it in the dashboard under Agent → Skills |
 | `skill.already_connected` (409) | That catalog skill is already on the workspace | `list_skills`, then `update_skill` |
 | `auth.insufficient_scope` (403) | The connection has the `read` scope only | Reconnect with write access, or use `/mcp` instead of `/mcp/readonly` |
 | `auth.mcp_route_forbidden` (403) | The operation is dashboard-only (channels, members, API keys, workspace deletion) | Do it at https://replybuddy.io |
