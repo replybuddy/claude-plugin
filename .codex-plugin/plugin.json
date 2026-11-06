@@ -1,6 +1,6 @@
 {
   "name": "replybuddy",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Set up and debug a ReplyBuddy AI sales agent and its CRM: profile, knowledge, QA, goals, deal funnels, sandbox tests, and integrations with your own backend through custom API skills, signed webhooks and API keys.",
   "author": {
     "name": "ReplyBuddy",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "keywords": ["replybuddy", "ai-agent", "crm", "messenger", "telegram", "webhooks", "sales"],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
+  "mcpServers": "./codex.mcp.json",
   "interface": {
     "displayName": "ReplyBuddy",
     "shortDescription": "AI sales agent for messengers",
