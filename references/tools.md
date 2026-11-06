@@ -2,22 +2,19 @@
 
 Server: `https://mcp.replybuddy.io/mcp` (all tools) or `https://mcp.replybuddy.io/mcp/readonly` (read tools only). Sign-in is OAuth 2.1; the consent screen picks the workspaces and the access level (`read`, or `read` + `write`). Your MCP client shows the current tool list with descriptions and schemas.
 
-## Two layers
+## One tool per operation
 
-1. **Typed tools** cover daily work and agent setup: the workspace profile, inbox, contacts, deals and tasks, deal funnel configuration, knowledge, QA, skills, goals, broadcasts, the sandbox and agent tests.
-2. **Generic tools** reach every other operation of the REST API: find it with `search_api`, read its schema with `describe_api`, then call `api_read` (GET), `api_create` (POST), `api_update` (PUT or PATCH) or `api_delete` (DELETE). Paths are written without `/api/v1`, for example `/deal-fields`. The full reference is `https://mcp.replybuddy.io/openapi.json`.
+Every operation has its own tool, named verb_object: `list_`, `get_`, `create_`, `update_`, `delete_` or `archive_`, and actions such as `move_deal`, `send_broadcast` or `rotate_webhook_secret`. There are about 200. Clients that load tools on demand (Claude Code, Codex) find them by name or task; the entry points (workspace, snapshot, conversations, deals, knowledge, goals, skills, sandbox) are always loaded. The REST reference for your own code is `https://mcp.replybuddy.io/openapi.json`.
 
-`search_api` tells you when an operation already has a typed tool (`"tool": "create_goal"`); use that tool then. The generic write tools refuse operations that have a typed destructive tool (error `mcp.use_dedicated_tool`, the hint names the tool).
-
-## How Claude asks before acting
+## How the client asks before acting
 
 Every tool is marked as read, write or destructive:
 
 - **read** tools run without asking;
-- **write** tools change data in a way you can undo inside ReplyBuddy (create, update, assign, move, toggle, restore); you can allow them once or always;
-- **destructive** tools are irreversible or reach people and systems outside ReplyBuddy; Claude asks before each call. These are every `api_delete` call, tools that replace a whole set (`replace_*`, `update_deal_funnel_config`, `reset_deal_funnel_stages`, `sandbox_reset`), tools that write to clients (`send_message`, `resend_message`, broadcasts) and tools that send data to your systems (`create_webhook_endpoint`, `test_custom_api_tool`).
+- **write** tools only add something new (`create_*`, `connect_skill`, runs and drafts); you can allow them once or always;
+- **destructive** tools change or remove what exists, or reach people and systems outside ReplyBuddy, so the client asks before each call unless you allowed the tool. These are every update, move, toggle, assignment and archive, every delete, tools that replace a whole set (`replace_*`, `update_deal_funnel_config`, `save_all_deal_funnels`, `reset_deal_funnel_stages`, `sandbox_reset`), tools that write to clients (`send_message`, `edit_message`, broadcasts, marketing rules that answer on their own) and tools that send data to your systems (webhooks, `test_custom_api_tool`). A change you can undo is still destructive: that is how the plugin directories require it.
 
-The markers describe the tools. Whether to ask is up to your Claude client, and you can turn the questions off.
+The markers describe the tools. Whether to ask is up to your client, and you can turn the questions off.
 
 ### Running without confirmations
 
@@ -26,27 +23,27 @@ The markers describe the tools. Whether to ask is up to your Claude client, and 
 
 Claude then sends messages and broadcasts to real clients and deletes data without asking. Use a read-only connection where you do not want that.
 
-## Frequent generic calls
+## Frequent tools beyond the basics
 
-| Task | Call |
+| Task | Tools |
 |---|---|
-| Deal fields | `api_read /deal-fields`, `api_create /deal-fields`, `api_update /deal-fields/{id}`, `api_update /deal-fields/reorder`, `api_delete /deal-fields/{id}` |
-| Deal stages | `api_read /deal-stages?funnel_id=`, `api_create /deal-stages`, `api_update /deal-stages/{id}`, `api_update /deal-stages/reorder`, `api_delete /deal-stages/{id}` |
-| Deal funnels | `api_create /deal-funnels`, `api_update /deal-funnels/{id}` (rename), `api_create /deal-funnels/{id}/duplicate`, `api_delete /deal-funnels/{id}` |
-| Task types | `api_read /task-types`, `api_create /task-types`, `api_update /task-types/{id}`, `api_delete /task-types/{id}` |
-| Knowledge | `api_create /knowledge/{id}/toggle`, `api_update /knowledge/reorder`, `api_create /knowledge/{id}/restore`, `api_delete /knowledge/{id}` (archives) |
-| QA | `api_create /qa/{id}/restore` |
-| Skills | `api_delete /skills/{id}` |
-| Goals | `api_read /funnel-stages/graph`, `api_update /funnel-stages/reorder`, `api_read /funnel-stages/{id}/followup-status`, `api_delete /funnel-stages/{id}` |
-| Conversation goal | `api_update /conversations/{id}/funnel-stage` |
-| Agent tests | `api_update /agent-tests/{id}`, `api_create /agent-tests/{id}/run`, `api_delete /agent-tests/{id}` |
-| Sandbox | `api_read /agents/{id}/sandbox/state`, `api_create /agents/{id}/sandbox/regenerate`, `api_create /agents/{id}/sandbox/messages/{msg_id}/save-as-test` |
-| Broadcast drafts | `api_read /agents/{id}/agent-broadcasts`, `api_create /agents/{id}/agent-broadcasts`, `api_update /agents/{id}/agent-broadcasts/{bid}`, then the typed `schedule_broadcast` or `send_broadcast` |
+| Deal fields | `list_deal_fields`, `create_deal_field`, `update_deal_field`, `reorder_deal_fields`, `delete_deal_field` |
+| Deal stages | `list_deal_stages` (`funnel_id`), `create_deal_stage`, `update_deal_stage`, `reorder_deal_stages`, `delete_deal_stage` |
+| Deal funnels | `create_deal_funnel`, `rename_deal_funnel`, `duplicate_deal_funnel`, `delete_deal_funnel` |
+| Task types | `list_task_types`, `create_task_type`, `update_task_type`, `delete_task_type` |
+| Knowledge | `toggle_knowledge`, `reorder_knowledge`, `archive_knowledge`, `restore_knowledge` |
+| QA | `archive_qa`, `restore_qa` |
+| Skills | `delete_skill` |
+| Goals | `get_goal_graph`, `reorder_goals`, `get_goal_reminder_status`, `delete_goal` |
+| Conversation goal | `set_conversation_goal` |
+| Agent tests | `update_agent_test`, `run_agent_test`, `delete_agent_test` |
+| Sandbox | `get_sandbox_state`, `regenerate_sandbox_reply`, `save_sandbox_reply_as_test` |
+| Broadcasts | `list_broadcasts`, `create_broadcast`, `update_broadcast`, `count_broadcast_audience`, then `schedule_broadcast` or `send_broadcast` |
 | Webhooks | see [webhooks.md](webhooks.md) |
-| Session | `api_read /mcp/session` (workspace id and name, scopes, token expiry; with several workspaces, `agents` lists them) |
+| Analytics | `get_deal_analytics`, `get_user_analytics` (a period and a timezone) |
 
 Under `/agents/{id}` the workspace of the call is used whatever id you pass.
 
 ## Connections with several workspaces
 
-A connection may cover several workspaces. It then has `list_workspaces` (id, name and your role in each), and every tool except `list_workspaces`, `search_api` and `describe_api` requires `agent_id`, set to one of those ids. Any other id gets `auth.access_denied`. A connection with one workspace has neither `list_workspaces` nor `agent_id`.
+A connection may cover several workspaces. It then has `list_workspaces` (id, name and your role in each), and every other tool requires `agent_id`, set to one of those ids. Any other id gets `auth.access_denied`. A connection with one workspace has neither `list_workspaces` nor `agent_id`.

@@ -23,7 +23,7 @@ curl -H "Authorization: Bearer $REPLYBUDDY_API_KEY" \
   "https://mcp.replybuddy.io/api/v1/deals?limit=20"
 ```
 
-- Base URL: `https://mcp.replybuddy.io/api/v1`. The operations and their schemas are in `https://mcp.replybuddy.io/openapi.json`; from Claude, `search_api` and `describe_api` show the same operations.
+- Base URL: `https://mcp.replybuddy.io/api/v1`. The operations and their schemas are in `https://mcp.replybuddy.io/openapi.json`; in an AI client each operation is its own ReplyBuddy tool.
 - The `agent_id` query parameter is filled in from the key. Passing another workspace's id is a 403.
 - Paths of the form `/agents/{id}/…` need the workspace id; read it once from `GET /api/v1/mcp/session`.
 - Errors have the shape described in [errors-and-limits.md](errors-and-limits.md); the rate limit is 200 requests per 10 seconds per client IP.

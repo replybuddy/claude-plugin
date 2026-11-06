@@ -12,7 +12,7 @@ A failed call is an ordinary tool result with `isError: true` and this text:
 
 | Code | Meaning | What to do |
 |---|---|---|
-| `validation.field_required`, `validation.invalid_body`, `validation.invalid_query` | An argument is missing or wrong; `details.field` says which | Fix that argument; check `describe_api` for generic calls |
+| `validation.field_required`, `validation.invalid_body`, `validation.invalid_query` | An argument is missing or wrong; `details.field` says which | Fix that argument; the tool's input schema lists the arguments |
 | `funnel.field_required`, `skill.invalid_config` | The goal or skill body is incomplete | Add the field from `details.field` |
 | `deal.invalid_config` (422) | A deal stage, funnel or reorder body does not match the stored funnel (for reorder: not exactly the current open stages) | Read the funnel again and rebuild the body |
 | `deal.amount_out_of_range` (422) | The deal `amount` is outside 0 to 999999999999.99 | Ask the user for the correct amount |
@@ -22,7 +22,6 @@ A failed call is an ordinary tool result with `isError: true` and this text:
 | `auth.insufficient_scope` (403) | The connection has the `read` scope only | Reconnect with write access, or use `/mcp` instead of `/mcp/readonly` |
 | `auth.mcp_route_forbidden` (403) | The operation is dashboard-only (channels, members, API keys, workspace deletion) | Do it at https://replybuddy.io |
 | `auth.access_denied` (403) | Not your workspace, your role lacks the permission, or the id does not exist | Check the id with a list tool; check the user's role |
-| `mcp.use_dedicated_tool` | A generic write was used for an operation that has a typed destructive tool | Call the tool named in `hint` |
 | `mcp.result_too_large` | The result is over 40 000 characters | Pass a smaller `limit`, or narrow the filter |
 | `rate_limited` (429) | More than 200 requests in 10 seconds from your IP | Wait `Retry-After` seconds |
 
