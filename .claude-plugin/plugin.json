@@ -1,7 +1,7 @@
 {
   "name": "replybuddy",
   "displayName": "ReplyBuddy",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Set up and debug a ReplyBuddy AI sales agent and its CRM from Claude: profile, knowledge, QA, goals, deal funnels, sandbox tests, and integrations with your own backend through custom API skills, signed webhooks and API keys.",
   "author": {
     "name": "ReplyBuddy",
