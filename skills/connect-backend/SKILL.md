@@ -18,11 +18,11 @@ When the user's code is in the current project, read it first: existing routes, 
 ## The agent calls your API (custom_api)
 
 1. `list_skills` — reuse an existing `custom_api` skill for the same system instead of adding a second one. Tool names are unique across the workspace.
-2. Agree with the user on each endpoint: method, URL, parameters and where each value comes from in the dialog, authentication. Ask for the token; never invent one. It goes in the authentication fields, not in `fixedHeaders` or the URL.
-3. `connect_skill` with `skill_type: "custom_api"`, a `when_to_use` that says in which client situations to call it, and `is_enabled: false` while testing.
+2. Agree with the user on each endpoint: method, URL, parameters and where each value comes from in the dialog, authentication. Never ask the user to paste a key, token or password into the chat, and never put one in `fixedHeaders` or the URL: ReplyBuddy accepts secrets only in its dashboard.
+3. `connect_skill` with `skill_type: "custom_api"`, `authentication: "none"`, a `when_to_use` that says in which client situations to call it, and `is_enabled: false` while testing. If the API needs a key, ask the user to open the skill in the dashboard (Agent → Skills), choose the authentication and enter the key there, and wait until they say it is done.
 4. `test_custom_api_tool` with the skill `id`, the tool object from the `connect_skill` response and sample `arguments`. It sends one real request: use a read-only endpoint or a staging backend for anything that changes data, and say so before calling it. Fix the URL, parameters or auth until the status and body are right. `502 skill.test_request_failed` means no answer came from the business API; check that the URL is public and reachable.
 5. `toggle_skill` to enable it, then check with the `test-agent` skill that the agent calls the tool when it should. The `thinking` field of the sandbox reply shows the call. Sandbox calls of a `custom_api` tool are real requests, like `test_custom_api_tool`.
-6. To change a tool later, `update_skill` with all tools of the skill, their names unchanged and secrets sent as `******` (or left out) to keep them. A secret stays with its host: when the URL moves to another host, ask the user for the secret again. Remove a skill with `api_delete /skills/{id}`.
+6. To change a tool later, `update_skill` with all tools of the skill, their names unchanged and secrets left as `******` (or left out) to keep them. A secret stays with its host: when the URL moves to another host, ask the user to enter the secret again in the dashboard. Remove a skill with `api_delete /skills/{id}`.
 
 ## ReplyBuddy notifies your backend (webhooks)
 
