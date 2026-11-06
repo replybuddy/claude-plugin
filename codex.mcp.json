@@ -9,7 +9,10 @@
             "type": "oauth",
             "client": {
               "mode": "dcr"
-            }
+            },
+            "authorizationUrl": "https://mcp.replybuddy.io/oauth/authorize",
+            "tokenUrl": "https://mcp.replybuddy.io/oauth/token",
+            "registrationUrl": "https://mcp.replybuddy.io/oauth/register"
           }
         }
       }
