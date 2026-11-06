@@ -1,6 +1,6 @@
 {
   "name": "replybuddy",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Set up and debug a ReplyBuddy AI sales agent and its CRM: profile, knowledge, QA, goals, deal funnels, sandbox tests, and integrations with your own backend through custom API skills, signed webhooks and API keys.",
   "author": {
     "name": "ReplyBuddy",
@@ -21,7 +21,7 @@
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://replybuddy.io",
-    "supportURL": "mailto:support@replybuddy.io",
+    "supportURL": "https://github.com/replybuddy/claude-plugin/issues",
     "privacyPolicyURL": "https://replybuddy.io/legal/en/PrivacyPolicy.html",
     "termsOfServiceURL": "https://replybuddy.io/legal/en/TermsOfService.html",
     "defaultPrompt": [
