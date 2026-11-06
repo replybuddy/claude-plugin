@@ -84,12 +84,12 @@ printf '%s.' "$T" | cat - body.json | openssl dgst -sha256 -hmac "$SECRET"
 | Task | Call |
 |---|---|
 | Create | `create_webhook_endpoint` with `url` (public `https`, cannot be changed later) and `events`. The response holds the signing `secret`, shown only once |
-| List | `api_read /webhook-endpoints` |
-| Change events, description, enable or disable | `api_update /webhook-endpoints/{id}` |
-| Send a test event now | `api_create /webhook-endpoints/{id}/test` (sent even to a disabled endpoint, no retries) |
-| Rotate the secret | `api_create /webhook-endpoints/{id}/rotate-secret` (the new secret is in the response only) |
-| Delivery log | `api_read /webhook-endpoints/{id}/deliveries` with `status` (`pending`, `delivered`, `failed`), `limit`, `offset`; each item has `attempts`, `last_status` (absent when no HTTP answer came), `last_error` and the exact `payload`. Request headers are not logged |
-| Send a delivery again | `api_create /webhook-deliveries/{id}/redeliver` (delivered or failed only; same event id) |
-| Delete | `api_delete /webhook-endpoints/{id}` (also deletes its log) |
+| List | `list_webhook_endpoints` |
+| Change events, description, enable or disable | `update_webhook_endpoint` |
+| Send a test event now | `send_test_webhook` (sent even to a disabled endpoint, no retries) |
+| Rotate the secret | `rotate_webhook_secret` (the new secret is in the response only) |
+| Delivery log | `list_webhook_deliveries` with `status` (`pending`, `delivered`, `failed`), `limit`, `offset`; each item has `attempts`, `last_status` (absent when no HTTP answer came), `last_error` and the exact `payload`. Request headers are not logged |
+| Send a delivery again | `redeliver_webhook` (delivered or failed only; same event id) |
+| Delete | `delete_webhook_endpoint` (also deletes its log) |
 
 To move an endpoint to a new URL, create a new one, switch your backend, then delete the old one.

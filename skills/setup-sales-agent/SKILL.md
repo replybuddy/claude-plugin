@@ -30,12 +30,12 @@ Do the steps the request needs, in this order:
 3. **Knowledge** (`create_knowledge`): one topic per entry, with `usage_prompt` saying when to use it ("when the client asks about prices or plans"). Update existing entries with `update_knowledge` instead of adding duplicates.
 4. **QA** (`create_qa`): exact answers for frequent questions, or an `instruction` for how to answer one.
 5. **Goals** (`create_goal`, `update_goal`): `name`, `instruction` (what the agent does while pursuing it), `stop_condition` (when it is reached), `when_to_enter` (when the agent takes it up), `data_fields` to collect (`code`, `description`, `value_type`, `required`), and `cadence` for reminders when the client goes quiet. Omit `cadence` for a goal without reminders.
-   - To make a goal the start goal, first `api_read /funnel-stages/graph`, then call `replace_goal_graph` with the same `transitions` and `layout` and the new `start_stage_id`. The tool replaces the whole graph, so sending only `start_stage_id` would delete the edges.
+   - To make a goal the start goal, first `get_goal_graph`, then call `replace_goal_graph` with the same `transitions` and `layout` and the new `start_stage_id`. The tool replaces the whole graph, so sending only `start_stage_id` would delete the edges.
    - The runtime picks goals by `when_to_enter`, not by graph edges; write `when_to_enter` so that two goals do not compete for the same moment.
 6. **Catalog skills** (`connect_skill`): `capture_question` to save questions the agent could not answer, `web_search`, `schedule_meeting` (the user connects it in the ReplyBuddy dashboard under Agent → Skills, because it needs a Calendly or Google Calendar token). Every skill needs `when_to_use`. For calls to the business's own API use the `connect-backend` skill.
 7. **Reply mode** last: `dialog_reply_mode` `auto` replies by itself, `copilot` drafts for a human, `manual` stays silent. Turning on `auto` makes the agent answer real clients on every connected channel: confirm it with the user.
 
-Use `search_api` for anything not covered here (toggling, reordering or restoring knowledge, deleting a goal); [tools.md](../../references/tools.md) lists the frequent paths.
+Every other operation (toggling, reordering or restoring knowledge, deleting a goal) has its own tool; [tools.md](../../references/tools.md) lists the frequent ones.
 
 ## 4. Check the result
 
@@ -47,6 +47,6 @@ Use `search_api` for anything not covered here (toggling, reordering or restorin
 
 - `system_prompt` in the snapshot is legacy and unused; do not write instructions there.
 - Goals and CRM deal stages are different things. "Funnel" in a sales request usually means goals; a kanban board for deals is the `configure-crm` skill.
-- `api_delete /knowledge/{id}` archives an entry; `api_create /knowledge/{id}/restore` brings it back. `api_create /knowledge/{id}/toggle` turns an entry off without archiving it.
+- `archive_knowledge` archives an entry; `restore_knowledge` brings it back. `toggle_knowledge` turns an entry off without archiving it.
 - Long identities that repeat the knowledge base make replies slower and less consistent. Keep facts in knowledge and QA, and rules in identity and behavior.
 - If an error comes back, read `code` and `details.field` and fix that argument ([errors-and-limits.md](../../references/errors-and-limits.md)).

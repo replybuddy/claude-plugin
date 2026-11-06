@@ -42,7 +42,7 @@ Before handing a dialog back to the AI, glance at the snapshot's `identity` and 
 
 - `funnel_state` on the conversation is the current goal. Wrong goal: compare `when_to_enter` of the goals in the snapshot; the runtime picks goals by `when_to_enter`, not by graph edges.
 - Asks the same question again: the field may be collected under another `code`, or the goal's `stop_condition` never matches.
-- Reminders: the goal's `cadence` and `working_hours`, the conversation's `followups_disabled`, and `api_read /funnel-stages/{id}/followup-status` (queued reminders and when a pending change applies).
+- Reminders: the goal's `cadence` and `working_hours`, the conversation's `followups_disabled`, and `get_goal_reminder_status` (queued reminders and when a pending change applies).
 
 **Handoff did not happen**
 
@@ -54,7 +54,7 @@ The `handoff_escalate` and `handoff_notify` sections in the snapshot's `behavior
 
 **Webhooks stopped**
 
-`api_read /webhook-endpoints` (`enabled`, `disabled_reason`), then `api_read /webhook-endpoints/{id}/deliveries` with `status: "failed"`: `last_status` and `last_error` show what the receiver answered. See [webhooks.md](../../references/webhooks.md).
+`list_webhook_endpoints` (`enabled`, `disabled_reason`), then `list_webhook_deliveries` with `status: "failed"`: `last_status` and `last_error` show what the receiver answered. See [webhooks.md](../../references/webhooks.md).
 
 ## 4. Report and fix
 

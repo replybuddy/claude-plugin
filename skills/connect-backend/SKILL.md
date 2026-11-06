@@ -22,27 +22,26 @@ When the user's code is in the current project, read it first: existing routes, 
 3. `connect_skill` with `skill_type: "custom_api"`, `authentication: "none"`, a `when_to_use` that says in which client situations to call it, and `is_enabled: false` while testing. If the API needs a key, ask the user to open the skill in the dashboard (Agent → Skills), choose the authentication and enter the key there, and wait until they say it is done.
 4. `test_custom_api_tool` with the skill `id`, the tool object from the `connect_skill` response and sample `arguments`. It sends one real request: use a read-only endpoint or a staging backend for anything that changes data, and say so before calling it. Fix the URL, parameters or auth until the status and body are right. `502 skill.test_request_failed` means no answer came from the business API; check that the URL is public and reachable.
 5. `toggle_skill` to enable it, then check with the `test-agent` skill that the agent calls the tool when it should. The `thinking` field of the sandbox reply shows the call. Sandbox calls of a `custom_api` tool are real requests, like `test_custom_api_tool`.
-6. To change a tool later, `update_skill` with all tools of the skill, their names unchanged and secrets left as `******` (or left out) to keep them. A secret stays with its host: when the URL moves to another host, ask the user to enter the secret again in the dashboard. Remove a skill with `api_delete /skills/{id}`.
+6. To change a tool later, `update_skill` with all tools of the skill, their names unchanged and secrets left as `******` (or left out) to keep them. A secret stays with its host: when the URL moves to another host, ask the user to enter the secret again in the dashboard. Remove a skill with `delete_skill`.
 
 ## ReplyBuddy notifies your backend (webhooks)
 
 1. Agree on the events (`message.received`, `conversation.handoff_requested`, `deal.created`, `deal.updated`, `deal.moved`, `deal.deleted`) and a public `https` URL. The URL cannot be changed later.
-2. If the receiver does not exist yet, write it in the user's stack. Its route must be the path of the endpoint's URL, which cannot be changed: when the endpoint already exists, read the URL with `api_read /webhook-endpoints` first. Verify `X-ReplyBuddy-Signature` over the raw body, reject timestamps older than 5 minutes, deduplicate on the envelope `id`, answer `2xx` fast and process asynchronously. The exact algorithm and tested Python and Node.js versions are in [webhooks.md](../../references/webhooks.md).
+2. If the receiver does not exist yet, write it in the user's stack. Its route must be the path of the endpoint's URL, which cannot be changed: when the endpoint already exists, read the URL with `list_webhook_endpoints` first. Verify `X-ReplyBuddy-Signature` over the raw body, reject timestamps older than 5 minutes, deduplicate on the envelope `id`, answer `2xx` fast and process asynchronously. The exact algorithm and tested Python and Node.js versions are in [webhooks.md](../../references/webhooks.md).
 3. `create_webhook_endpoint` with `url` and `events`. Your AI client asks before it because a new endpoint starts sending workspace data outside (client message texts with `message.received`): confirm the URL and the events with the user, and subscribe only to what was asked. The response has the signing `secret` once: tell the user to put it into their secret store or environment variable now; do not write it into tracked files.
-4. `api_create /webhook-endpoints/{id}/test` sends a `webhook.test` event right away; check `status`, `last_status` and `last_error` in the returned delivery (`last_status` is absent when the receiver did not answer at all; `last_error` then says why).
-5. Later: `api_read /webhook-endpoints/{id}/deliveries` for the log, `api_create /webhook-deliveries/{id}/redeliver` to send one again, `api_update /webhook-endpoints/{id}` with `enabled: true` to resume an endpoint disabled after repeated failures, `api_create /webhook-endpoints/{id}/rotate-secret` to rotate.
+4. `send_test_webhook` sends a `webhook.test` event right away; check `status`, `last_status` and `last_error` in the returned delivery (`last_status` is absent when the receiver did not answer at all; `last_error` then says why).
+5. Later: `list_webhook_deliveries` for the log, `redeliver_webhook` to send one again, `update_webhook_endpoint` with `enabled: true` to resume an endpoint disabled after repeated failures, `rotate_webhook_secret` to rotate.
 
 ## Your backend calls ReplyBuddy (API keys)
 
 1. A key is created only by the workspace owner or an admin in the dashboard (Connections → API & MCP); Claude cannot create one. Tell the user where and which scopes to choose, and that the key acts as its creator and stops working if that person leaves the workspace.
 2. Write the client code with `Authorization: Bearer <key>` against `https://mcp.replybuddy.io/api/v1`, the key read from an environment variable.
-3. Find operations with `search_api` and their exact schemas with `describe_api`; generate request and response types from `describe_api` output, not from guesses. The full spec is `https://mcp.replybuddy.io/openapi.json`.
-4. To try a call before writing code, make the same call with `api_read` / `api_create` / `api_update` from Claude.
+3. Take the operations and their exact schemas from `https://mcp.replybuddy.io/openapi.json`; generate request and response types from it, not from guesses.
+4. To try a call before writing code, make the same call with the matching ReplyBuddy tool from your AI client.
 
 ## Pitfalls
 
-- `api_create` refuses `POST /webhook-endpoints` (`mcp.use_dedicated_tool`): use `create_webhook_endpoint`.
 - `message.received` fires for incoming client messages only. To follow the agent's replies, read `list_messages` from your backend with an API key.
 - Webhook delivery is at least once and may repeat; a receiver without deduplication creates duplicate leads.
 - A redirect (3xx) from the webhook URL counts as a failure; point to the final URL.
-- An endpoint is disabled after about 28 hours of failures; check `enabled` and `disabled_reason` with `api_read /webhook-endpoints` when events stop.
+- An endpoint is disabled after about 28 hours of failures; check `enabled` and `disabled_reason` with `list_webhook_endpoints` when events stop.

@@ -15,16 +15,16 @@ Deal funnels track sales deals on a kanban board. They are separate from the AI 
 
 ## 2. Pick the way to change it
 
-**Small changes: one record at a time through the generic tools.** Find the operation with `search_api`, check the body with `describe_api`, then call it:
+**Small changes: one record at a time, each with its own tool.** The tool's input schema shows the body:
 
 | Change | Call |
 |---|---|
-| Add, rename or recolor a stage | `api_create /deal-stages` (`funnel_id` in `query`, defaults to the main funnel), `api_update /deal-stages/{id}`. A new stage goes after the last open stage; reorder to put it elsewhere |
-| Reorder stages | `api_update /deal-stages/reorder`, body `ordered_ids`, `funnel_id` in `query`. `ordered_ids` must hold exactly the funnel's current open stages (no `won` / `lost`); read them with `api_read /deal-stages` right before the call. A 422 `deal.invalid_config` means the list differs from the stored one: read again and retry |
-| Delete a stage | `api_delete /deal-stages/{id}` (see `describe_api` when it has deals) |
-| Deal fields | `api_create /deal-fields` (`label`, `type`: `text`, `number`, `date`, `phone`, `select` with `options`; numbers may be `number_mode: "currency"` with `currency_code`), `api_update /deal-fields/{id}`, `api_update /deal-fields/reorder`, `api_delete /deal-fields/{id}`. A new field is turned on in every funnel |
-| Task types | `api_create /task-types` (`name`, `color`, `icon`), `api_update /task-types/{id}`, `api_delete /task-types/{id}` |
-| New, renamed or copied funnel | `api_create /deal-funnels`, `api_update /deal-funnels/{id}`, `api_create /deal-funnels/{id}/duplicate` |
+| Add, rename or recolor a stage | `create_deal_stage` (`funnel_id` in `query`, defaults to the main funnel), `update_deal_stage`. A new stage goes after the last open stage; reorder to put it elsewhere |
+| Reorder stages | `reorder_deal_stages`, body `ordered_ids`, `funnel_id` in `query`. `ordered_ids` must hold exactly the funnel's current open stages (no `won` / `lost`); read them with `list_deal_stages` right before the call. A 422 `deal.invalid_config` means the list differs from the stored one: read again and retry |
+| Delete a stage | `delete_deal_stage` (its schema names where the stage's deals go) |
+| Deal fields | `create_deal_field` (`label`, `type`: `text`, `number`, `date`, `phone`, `select` with `options`; numbers may be `number_mode: "currency"` with `currency_code`), `update_deal_field`, `reorder_deal_fields`, `delete_deal_field`. A new field is turned on in every funnel |
+| Task types | `create_task_type` (`name`, `color`, `icon`), `update_task_type`, `delete_task_type` |
+| New, renamed or copied funnel | `create_deal_funnel`, `rename_deal_funnel`, `duplicate_deal_funnel` |
 
 **Restructuring a funnel: `update_deal_funnel_config`.** It saves the stages, field visibility and settings of one funnel atomically. It is destructive: it replaces the whole stage list, so build the body from `get_deal_funnel_config`, change what was asked, keep every other stage with its `id`, and send:
 
@@ -58,5 +58,5 @@ Links between deal stages and goals: `trigger_conv_stage_id` moves a deal into t
 
 - Deal fields and task types belong to the workspace, not to one funnel; a funnel only decides whether a field is shown (`fields`).
 - Every funnel has exactly one `won` and one `lost` stage at the end; new stages are `open`.
-- Deleting a stage or funnel with deals needs a destination; use `update_deal_funnel_config` with `stage_transfers`, or `describe_api` for `DELETE /deal-funnels/{id}`.
+- Deleting a stage or funnel with deals needs a destination; use `update_deal_funnel_config` with `stage_transfers`, or `delete_deal_funnel`, whose schema names where its deals go.
 - Errors carry `details.field`; see [errors-and-limits.md](../../references/errors-and-limits.md).

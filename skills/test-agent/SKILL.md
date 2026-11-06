@@ -16,10 +16,10 @@ Two tools for two jobs:
 2. `sandbox_list_messages` shows the current sandbox history (always the whole dialog). Earlier messages influence the agent: a new scenario should start from an empty sandbox, so ask the user before `sandbox_reset` (it clears the sandbox dialog only, but the history is lost). For a check of one question, a test case is cleaner than a sandbox with old history.
 3. `sandbox_send_message` with the client's text. The reply is generated asynchronously: wait about 5–10 seconds, call `sandbox_list_messages`, and repeat until a message with `role: "ai"` appears after yours. A reply usually takes 5–20 seconds; the agent may answer with several messages.
 4. Read each `ai` message's `content` and `thinking`. `thinking` shows the agent's reasoning and what it did: knowledge it loaded, tags it set, data fields it collected, tools it called.
-5. Continue the dialog as the client would. To get another version of the last reply, `api_create /agents/{id}/sandbox/regenerate`.
+5. Continue the dialog as the client would. To get another version of the last reply, `regenerate_sandbox_reply`.
 6. Report per step: what the client wrote, what the agent answered, whether it matched the expectation, and what in the configuration explains a miss (identity, a behavior section, a goal's `instruction` or `stop_condition`, a knowledge entry).
 
-A good answer worth keeping becomes a test case with `api_create /agents/{id}/sandbox/messages/{msg_id}/save-as-test` (the `msg_id` of the `ai` message). It stores the reply word for word as `expected_answer`; rewrite that as criteria with `api_update /agent-tests/{id}` (see below).
+A good answer worth keeping becomes a test case with `save_sandbox_reply_as_test` (the `msg_id` of the `ai` message). It stores the reply word for word as `expected_answer`; rewrite that as criteria with `update_agent_test` (see below).
 
 In `/agents/{id}/…` paths any id works: the server uses the workspace of the call (its id is `agent_id` in `get_workspace_snapshot`).
 
@@ -27,8 +27,8 @@ In `/agents/{id}/…` paths any id works: the server uses the workspace of the c
 
 1. `list_agent_tests` — existing cases, their last `status` (`passed`, `failed`) and `actual_answer`.
 2. `create_agent_test` with `question` (what the client writes) and `expected_answer`. Write the expectation as criteria, not as an exact text: "Gives the price range 5.5–9.9k, offers the free diagnostic, asks for the parent's phone; does not promise a grade without conditions." Exact wording fails on every harmless rephrase.
-3. `run_agent_tests` runs every case and returns a `job_id`. Poll `get_agent_test_job` with it every 10–20 seconds until `completed` equals `total`. To run one case: `api_create /agent-tests/{id}/run`.
-4. For each `failed` case, compare `actual_answer` with `expected_answer` and say whether the agent or the expectation is wrong. Edit a case with `api_update /agent-tests/{id}`; delete one with `api_delete /agent-tests/{id}`.
+3. `run_agent_tests` runs every case and returns a `job_id`. Poll `get_agent_test_job` with it every 10–20 seconds until `completed` equals `total`. To run one case: `run_agent_test`.
+4. For each `failed` case, compare `actual_answer` with `expected_answer` and say whether the agent or the expectation is wrong. Edit a case with `update_agent_test`; delete one with `delete_agent_test`.
 
 ## After a configuration change
 
