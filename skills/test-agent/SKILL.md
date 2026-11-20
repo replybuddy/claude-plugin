@@ -12,12 +12,12 @@ Two tools for two jobs:
 
 ## Sandbox dialog
 
-1. Plan the scenario with the user: who the client is, what they write, what the agent must do at each step (which goal, which data to collect, when to hand over).
+1. Plan the scenario with the user: who the client is, what they write, what the agent must do at each step (which stage, which data to collect, when to hand over).
 2. `sandbox_list_messages` shows the current sandbox history (always the whole dialog). Earlier messages influence the agent: a new scenario should start from an empty sandbox, so ask the user before `sandbox_reset` (it clears the sandbox dialog only, but the history is lost). For a check of one question, a test case is cleaner than a sandbox with old history.
 3. `sandbox_send_message` with the client's text. The reply is generated asynchronously: wait about 5–10 seconds, call `sandbox_list_messages`, and repeat until a message with `role: "ai"` appears after yours. A reply usually takes 5–20 seconds; the agent may answer with several messages.
-4. Read each `ai` message's `content` and `thinking`. `thinking` shows the agent's reasoning and what it did: knowledge it loaded, tags it set, data fields it collected, tools it called.
+4. Read each `ai` message's `content` and `ai_turn`. `reasoning` is why the agent answered this way; `actions` is what it did: knowledge it loaded, tags it set, data fields it collected, tools it called (each has `type`, `status`, `label`, optional `error` and `data`). Messages of one reply share the same `ai_turn.id`. `tool_exchange` (the calls it made and what came back) comes with messages of real dialogs, not with sandbox replies.
 5. Continue the dialog as the client would. To get another version of the last reply, `regenerate_sandbox_reply`.
-6. Report per step: what the client wrote, what the agent answered, whether it matched the expectation, and what in the configuration explains a miss (identity, a behavior section, a goal's `instruction` or `stop_condition`, a knowledge entry).
+6. Report per step: what the client wrote, what the agent answered, whether it matched the expectation, and what in the configuration explains a miss (identity, a behavior section, a stage's `instruction` or `stop_condition`, a knowledge entry).
 
 A good answer worth keeping becomes a test case with `save_sandbox_reply_as_test` (the `msg_id` of the `ai` message). It stores the reply word for word as `expected_answer`; rewrite that as criteria with `update_agent_test` (see below).
 
@@ -39,6 +39,6 @@ In `/agents/{id}/…` paths any id works: the server uses the workspace of the c
 
 ## Pitfalls
 
-- Each test case is one client message answered from the start goal with no dialog history; scenarios that need several turns belong in the sandbox.
-- In the sandbox, goal switches, collected data fields, tags, notes and catalog skill actions (such as booking a meeting) are simulated: `thinking` marks them as simulated and no data changes. Calls of enabled `custom_api` skills are real requests to the business API.
+- Each test case is one client message answered from the incoming stage with no dialog history; scenarios that need several turns belong in the sandbox.
+- In the sandbox, stage switches, tasks, collected data fields, tags, notes and catalog skill actions (such as booking a meeting) are simulated: `ai_turn.actions` mark them with `status: "simulated"` and no data changes. Calls of enabled `custom_api` skills are real requests to the business API.
 - There is no draft mode: the sandbox and real dialogs use the same saved configuration, so a change reaches real clients as soon as it is saved. Test right after saving and be ready to revert (`list_history` shows the previous versions).

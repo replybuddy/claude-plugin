@@ -17,7 +17,7 @@ It adds the ReplyBuddy MCP server (`https://mcp.replybuddy.io/mcp`) and five ski
 
 | Skill | When Claude uses it |
 |---|---|
-| `setup-sales-agent` | Setting up or reworking the agent: identity, behavior, knowledge, QA answers, goals with data to collect and reminders, catalog skills |
+| `setup-sales-agent` | Setting up or reworking the agent: identity, behavior, knowledge, QA answers, deal stages with their AI settings (data to collect, reminders), catalog skills |
 | `connect-backend` | Linking ReplyBuddy with your system: `custom_api` skills (the agent calls your API), signed webhooks (ReplyBuddy calls your backend), API keys (your backend calls ReplyBuddy) |
 | `configure-crm` | Deal funnels, stages and their automations, deal fields, task types |
 | `test-agent` | Sandbox dialogs and saved test cases, before real clients see a change |

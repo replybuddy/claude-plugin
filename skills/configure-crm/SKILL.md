@@ -5,13 +5,13 @@ description: Use when someone wants to shape the deal pipeline in ReplyBuddy's b
 
 # Configure the ReplyBuddy CRM
 
-Deal funnels track sales deals on a kanban board. They are separate from the AI agent's goals (the API calls those funnel stages): a request about how the bot leads a dialog belongs to the `setup-sales-agent` skill. See [workspace-model.md](../../references/workspace-model.md).
+Deal funnels track sales deals on a kanban board, and a dialog stands on the stage of its open deal. What the AI does on a stage (instruction, entry rule, data to collect, reminders) is its AI settings: that belongs to the `setup-sales-agent` skill. See [workspace-model.md](../../references/workspace-model.md).
 
 ## 1. Read the current setup
 
 1. `list_deal_funnels` — every funnel; `is_main` marks the main one.
 2. `get_deal_funnel_config` with the funnel `id` — its stages (`open`, then one `won` and one `lost`), `deal_fields` and `task_types` (both shared by the whole workspace), which fields the funnel shows (`fields`), `settings` (close reasons, currency, card display) and the two revisions `funnel.config_revision` and `workspace_revision`.
-3. `list_goals` when the request links stages to the agent's goals.
+3. `get_stage_catalog` when the request concerns the incoming stage («no deal») or the AI settings of stages.
 
 ## 2. Pick the way to change it
 
@@ -44,11 +44,9 @@ A stage may act when a deal enters it (`automation` in the stage body; `get_deal
 
 - `task` — create a task (`type_id` from `task_types`, `assignee`: `deal`, `ai` or a user id from `list_members`, `due_preset` or `due_days`);
 - `reassign` — reassign the deal and/or the conversation;
-- `message` — send the client a message from `template`. This writes to a real client on every deal that enters the stage: confirm the text with the user;
-- `workspace_notification` — notify the team;
-- `force_conversation_stage_id` — switch the dialog to a goal of the agent.
+- `message` — send the client a message from `template`. This writes to a real client on every deal that enters the stage: confirm the text with the user.
 
-Links between deal stages and goals: `trigger_conv_stage_id` moves a deal into this stage when its dialog reaches that goal (only forward, never out of `won` or `lost`); `on_enter_conv_stage_id` sets the dialog's goal when a deal enters the stage. Use goal ids from `list_goals`. Moving a deal to `lost` requires an enabled close reason of that funnel.
+Automation runs on every entry, whoever moved the deal: a person, `move_deal` or the AI. When the AI moves a dialog, its primary deal moves with it. Moving a deal to `lost` requires an enabled close reason of that funnel.
 
 ## 4. Check
 
