@@ -13,7 +13,9 @@ A failed call is an ordinary tool result with `isError: true` and this text:
 | Code | Meaning | What to do |
 |---|---|---|
 | `validation.field_required`, `validation.invalid_body`, `validation.invalid_query` | An argument is missing or wrong; `details.field` says which | Fix that argument; the tool's input schema lists the arguments |
-| `funnel.field_required`, `skill.invalid_config` | The goal or skill body is incomplete | Add the field from `details.field` |
+| `skill.field_required`, `skill.invalid_config` | The skill body is incomplete | Add the field from `details.field` |
+| `funnel.invalid_config`, `funnel.field_code_required`, `funnel.field_code_duplicate_in_payload` | The AI settings of a stage are invalid, or a data field has no code or repeats one | Fix the `update_stage_ai` body |
+| `funnel.field_type_conflict` (409) | A data field code already has another value type on another stage; `details.field` names it | Reuse the type from `get_stage_field_schema`, or pick another code |
 | `deal.invalid_config` (422) | A deal stage, funnel or reorder body does not match the stored funnel (for reorder: not exactly the current open stages) | Read the funnel again and rebuild the body |
 | `deal.amount_out_of_range` (422) | The deal `amount` is outside 0 to 999999999999.99 | Ask the user for the correct amount |
 | `skill.test_request_failed` (502) | `test_custom_api_tool` got no answer from your API | Check that the URL is public, resolves and answers over TLS |

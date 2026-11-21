@@ -4,7 +4,7 @@ Server: `https://mcp.replybuddy.io/mcp` (all tools) or `https://mcp.replybuddy.i
 
 ## One tool per operation
 
-Every operation has its own tool, named verb_object: `list_`, `get_`, `create_`, `update_`, `delete_` or `archive_`, and actions such as `move_deal`, `send_broadcast` or `rotate_webhook_secret`. There are about 200. Clients that load tools on demand (Claude Code, Codex) find them by name or task; the entry points (workspace, snapshot, conversations, deals, knowledge, goals, skills, sandbox) are always loaded. The REST reference for your own code is `https://mcp.replybuddy.io/openapi.json`.
+Every operation has its own tool, named verb_object: `list_`, `get_`, `create_`, `update_`, `delete_` or `archive_`, and actions such as `move_deal`, `send_broadcast` or `rotate_webhook_secret`. There are about 200. Clients that load tools on demand (Claude Code, Codex) find them by name or task; the entry points (workspace, snapshot, conversations, deals, knowledge, stages, skills, sandbox) are always loaded. The REST reference for your own code is `https://mcp.replybuddy.io/openapi.json`.
 
 ## How the client asks before acting
 
@@ -34,8 +34,8 @@ Claude then sends messages and broadcasts to real clients and deletes data witho
 | Knowledge | `toggle_knowledge`, `reorder_knowledge`, `archive_knowledge`, `restore_knowledge` |
 | QA | `archive_qa`, `restore_qa` |
 | Skills | `delete_skill` |
-| Goals | `get_goal_graph`, `reorder_goals`, `get_goal_reminder_status`, `delete_goal` |
-| Conversation goal | `set_conversation_goal` |
+| Stage AI settings | `get_stage_catalog`, `update_stage_ai`, `get_stage_field_schema`, `get_stage_reminder_status`, `replan_stage_reminders` |
+| Conversation stage | `set_conversation_stage` |
 | Agent tests | `update_agent_test`, `run_agent_test`, `delete_agent_test` |
 | Sandbox | `get_sandbox_state`, `regenerate_sandbox_reply`, `save_sandbox_reply_as_test` |
 | Broadcasts | `list_broadcasts`, `create_broadcast`, `update_broadcast`, `count_broadcast_audience`, then `schedule_broadcast` or `send_broadcast` |
@@ -46,4 +46,4 @@ Under `/agents/{id}` the workspace of the call is used whatever id you pass.
 
 ## Connections with several workspaces
 
-A connection may cover several workspaces. It then has `list_workspaces` (id, name and your role in each), and every other tool requires `agent_id`, set to one of those ids. Any other id gets `auth.access_denied`. A connection with one workspace has neither `list_workspaces` nor `agent_id`.
+A connection may cover several workspaces. It then has `list_workspaces` (id, name and your role in each), and every other tool requires `agent_id`, set to one of those ids. A call made without `agent_id` returns those workspaces in `details.workspaces` of its error. Any other id gets `auth.access_denied`. A connection with one workspace has neither `list_workspaces` nor `agent_id`.
