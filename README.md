@@ -62,7 +62,7 @@ Any MCP client can connect to `https://mcp.replybuddy.io/mcp` directly. For a co
 - Read tools run without asking. By default your client asks before every change to existing data and every outward-facing action: edits, moves and deletions, sending messages and broadcasts, replacing whole sets, webhooks and test requests to your API. Creating something new can be allowed once. [You can turn the questions off](references/tools.md#running-without-confirmations) in your client.
 - Connecting messenger channels, managing members, creating API keys and deleting a workspace are possible only in the ReplyBuddy dashboard.
 
-Details: [workspace model](references/workspace-model.md), [tools](references/tools.md), [errors and limits](references/errors-and-limits.md), [webhooks](references/webhooks.md), [API keys](references/api-keys.md), [custom_api skills](references/custom-api-skills.md).
+Details: [workspace model](references/workspace-model.md), [tools](references/tools.md), [errors and limits](references/errors-and-limits.md), [webhooks](references/webhooks.md), [API keys](references/api-keys.md), [custom_api skills](references/custom-api-skills.md), and the other files in [references](references). The same texts come from the server's `get_guide` tool, so a client without this plugin reads them too; the files here are copies of the server's guides, not edited by hand.
 
 ## Data: what is sent where
 

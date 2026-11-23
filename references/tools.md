@@ -4,7 +4,7 @@ Server: `https://mcp.replybuddy.io/mcp` (all tools) or `https://mcp.replybuddy.i
 
 ## One tool per operation
 
-Every operation has its own tool, named verb_object: `list_`, `get_`, `create_`, `update_`, `delete_` or `archive_`, and actions such as `move_deal`, `send_broadcast` or `rotate_webhook_secret`. There are about 200. Clients that load tools on demand (Claude Code, Codex) find them by name or task; the entry points (workspace, snapshot, conversations, deals, knowledge, stages, skills, sandbox) are always loaded. The REST reference for your own code is `https://mcp.replybuddy.io/openapi.json`.
+Every operation has its own tool, named verb_object: `list_`, `get_`, `create_`, `update_`, `delete_` or `archive_`, and actions such as `move_deal`, `send_broadcast` or `rotate_webhook_secret`. There are about 200. Clients that load tools on demand (Claude Code, Codex) find them by name or task; the entry points (workspace, overview, snapshot, conversations, messages, deals, knowledge, stages, skills, sandbox, `list_workspaces` and `get_guide`) are always loaded. `get_guide` returns one section of these guides. The REST reference for your own code is `https://mcp.replybuddy.io/openapi.json`.
 
 ## How the client asks before acting
 
@@ -21,7 +21,7 @@ The markers describe the tools. Whether to ask is up to your client, and you can
 - **Claude Code:** add `"mcp__plugin_replybuddy_replybuddy__*"` to `permissions.allow` in your settings. For a server you added yourself, write `mcp__<server name>__*`.
 - **Claude.ai and Claude Desktop:** set the tool permissions in the connector settings.
 
-Claude then sends messages and broadcasts to real clients and deletes data without asking. Use a read-only connection where you do not want that.
+The client then sends messages and broadcasts to real clients and deletes data without asking. Use a read-only connection where you do not want that.
 
 ## Frequent tools beyond the basics
 
@@ -40,7 +40,7 @@ Claude then sends messages and broadcasts to real clients and deletes data witho
 | Sandbox | `get_sandbox_state`, `regenerate_sandbox_reply`, `save_sandbox_reply_as_test` |
 | Broadcasts | `list_broadcasts`, `create_broadcast`, `update_broadcast`, `count_broadcast_audience`, then `schedule_broadcast` or `send_broadcast` |
 | Webhooks | see [webhooks.md](webhooks.md) |
-| Analytics | `get_deal_analytics`, `get_user_analytics` (a period and a timezone) |
+| Analytics | `get_deal_analytics`, `get_user_analytics` (a period; the timezone defaults to the workspace's) |
 
 Under `/agents/{id}` the workspace of the call is used whatever id you pass.
 

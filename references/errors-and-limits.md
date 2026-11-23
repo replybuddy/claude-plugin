@@ -24,13 +24,13 @@ A failed call is an ordinary tool result with `isError: true` and this text:
 | `auth.insufficient_scope` (403) | The connection has the `read` scope only | Reconnect with write access, or use `/mcp` instead of `/mcp/readonly` |
 | `auth.mcp_route_forbidden` (403) | The operation is dashboard-only (channels, members, API keys, workspace deletion) | Do it at https://replybuddy.io |
 | `auth.access_denied` (403) | Not your workspace, your role lacks the permission, or the id does not exist | Check the id with a list tool; check the user's role |
-| `mcp.result_too_large` | The result is over 40 000 characters | Pass a smaller `limit`, or narrow the filter |
-| `rate_limited` (429) | More than 200 requests in 10 seconds from your IP | Wait `Retry-After` seconds |
+| `mcp.result_too_large` (413) | A call without paging returned over 40 000 characters (a paged list instead returns the items that fit and a note with the arguments that continue it) | Narrow the filter |
+| `skill.test_rate_limited` (429) | More than 20 `test_custom_api_tool` calls a minute | Wait a minute and retry |
 
 ## Limits
 
-- 200 requests per 10 seconds per client IP, on every MCP host path including sign-in.
-- A tool result is at most 40 000 characters. List tools take `limit` (knowledge and QA 1–100, CRM lists 1–200); out-of-range values are rejected, not clamped.
+- 200 requests per 10 seconds per client IP on the MCP host, sign-in included. Past it the HTTP request itself gets 429 with `Retry-After`, not a tool result.
+- A tool result is at most 40 000 characters. List tools take `limit`; the tool's schema gives its range (knowledge and QA 1–100; deals, contacts and tasks 1–200; most other lists up to 100). Stay inside it: some lists reject a value out of range, others fall back to their default.
 - `test_custom_api_tool`: 20 calls per minute; private and internal addresses are refused.
-- Access tokens live 1 hour and refresh tokens 30 days; Claude refreshes them for you. A revoked connection may still list tools for up to 60 seconds, while data calls fail at once.
+- Access tokens live 1 hour and refresh tokens 30 days; the client refreshes them. A revoked connection may still list tools for up to 60 seconds, while data calls fail at once.
 - A workspace has at most 10 webhook endpoints.
