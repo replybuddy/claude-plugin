@@ -40,7 +40,7 @@ Claude then sends messages and broadcasts to real clients and deletes data witho
 | Sandbox | `get_sandbox_state`, `regenerate_sandbox_reply`, `save_sandbox_reply_as_test` |
 | Broadcasts | `list_broadcasts`, `create_broadcast`, `update_broadcast`, `count_broadcast_audience`, then `schedule_broadcast` or `send_broadcast` |
 | Webhooks | see [webhooks.md](webhooks.md) |
-| Analytics | `get_deal_analytics`, `get_user_analytics` (a period and a timezone) |
+| Analytics | `get_deal_analytics`, `get_user_analytics` (a period; the timezone defaults to the workspace's) |
 
 Under `/agents/{id}` the workspace of the call is used whatever id you pass.
 

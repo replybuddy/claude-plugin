@@ -13,6 +13,8 @@ A **workspace** is one AI agent together with its messenger channels, contacts, 
 | Skills | Actions the agent can take: `capture_question` (save questions it could not answer), `web_search`, `schedule_meeting` (Calendly or Google Calendar), `custom_api` (calls your HTTP API; several per workspace) | `list_skills`, `connect_skill`, `update_skill`, `toggle_skill`, `test_custom_api_tool` |
 | Stage AI settings | What the agent does while a dialog stands on a deal stage: `instruction`, `stop_condition`, `when_to_enter`, data fields to collect and a reminder cadence for when the client goes quiet | `get_stage_catalog`, `update_stage_ai`, `create_deal_stage` with `ai` |
 
+`get_workspace_overview` is the first call to see what is set up and the current load, as counts and flags: channels, knowledge, skills, every stage with its AI settings and the conversations, deals and reminders on it, automations, broadcasts, tests.
+
 `get_workspace_snapshot` returns all of this exactly as the AI runtime receives it, with skill secrets masked. Use it before and after a change. Its `system_prompt` field is legacy and unused; `config_version_id` grows by one on every change.
 
 ## Stages, deals and dialogs
