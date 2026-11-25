@@ -1,6 +1,6 @@
 {
   "name": "replybuddy",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Set up and debug a ReplyBuddy AI sales agent and its CRM: profile, knowledge, QA, deal stages with their AI settings, deal funnels, sandbox tests, and integrations with your own backend through custom API skills, signed webhooks and API keys.",
   "author": {
     "name": "ReplyBuddy",
@@ -10,7 +10,15 @@
   "homepage": "https://replybuddy.io",
   "repository": "https://github.com/replybuddy/claude-plugin",
   "license": "MIT",
-  "keywords": ["replybuddy", "ai-agent", "crm", "messenger", "telegram", "webhooks", "sales"],
+  "keywords": [
+    "replybuddy",
+    "ai-agent",
+    "crm",
+    "messenger",
+    "telegram",
+    "webhooks",
+    "sales"
+  ],
   "skills": "./skills/",
   "mcpServers": "./codex.mcp.json",
   "interface": {
@@ -19,7 +27,10 @@
     "longDescription": "ReplyBuddy is an AI agent that answers clients in messengers (Telegram, Instagram, MAX, Avito and Zalo), with a CRM built around it. This plugin connects the ReplyBuddy workspaces you choose, so you can set up the agent, check how it answers, find out why it answered the way it did, and work with its dialogs, contacts and deals. Five skills cover agent setup, sandbox testing, reply diagnosis, deal funnels, and integrations with your own backend through custom API skills, signed webhooks and API keys. You sign in with OAuth and pick the workspaces and the access level: read only, or read and write. Messenger channels are connected only in the ReplyBuddy dashboard.",
     "developerName": "ReplyBuddy",
     "category": "Business & Operations",
-    "capabilities": ["Read", "Write"],
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://replybuddy.io",
     "supportURL": "https://github.com/replybuddy/claude-plugin/issues",
     "privacyPolicyURL": "https://replybuddy.io/legal/en/PrivacyPolicy.html",
@@ -31,5 +42,62 @@
     ],
     "composerIcon": "./assets/logo.png",
     "logo": "./assets/logo.png"
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Workspace 'Bluebird Coffee (demo)' connected with access 'Read and write'. Read-only overview of how the AI agent is configured and which deal stages it works by.",
+              "prompt": "Show how my ReplyBuddy agent is set up and which deal stages it works by.",
+              "tools_triggered": "get_workspace_overview, get_workspace_snapshot, get_stage_catalog",
+              "expected_behavior": "Summarizes the agent 'Mia' of Bluebird Coffee: its identity and behavior rules, and the stages with AI settings, including 'Collect order details' (collects the coffee choice and a phone number). Nothing is invented beyond the workspace data. No data is changed."
+            },
+            {
+              "description": "Workspace 'Bluebird Coffee (demo)' connected with access 'Read and write'. Add a knowledge entry and check in the sandbox that the agent uses it. Writes only to the demo workspace.",
+              "prompt": "Add a knowledge entry about delivery times: 2–3 days in the city. Then ask the agent in the sandbox how long delivery takes.",
+              "tools_triggered": "create_knowledge, sandbox_send_message, sandbox_list_messages",
+              "expected_behavior": "A knowledge entry about delivery times is created. A sandbox message is sent, and the agent's reply (read a few seconds later) says delivery takes 2–3 days."
+            },
+            {
+              "description": "Workspace 'Bluebird Coffee (demo)' connected with access 'Read and write'. Change the deal funnel: add a stage and a deal field. Writes only to the demo workspace.",
+              "prompt": "In the main deal funnel, add the stage \"Invoice sent\" after \"In progress\" and a \"Delivery city\" text field on deals.",
+              "tools_triggered": "list_deal_funnels, get_deal_funnel_config, update_deal_funnel_config",
+              "expected_behavior": "The main funnel now has the stage 'Invoice sent' right after 'In progress' and a text deal field 'Delivery city'. Existing stages and deals stay in place."
+            },
+            {
+              "description": "Workspace 'Bluebird Coffee (demo)' connected with access 'Read and write'. Review a real dialog. Use the Telegram dialog with 'nikolai (@nordbobr)'; its messages are in Russian, the answer is in English.",
+              "prompt": "Open the Telegram dialog with nikolai (@nordbobr) and tell me what the client ordered and how the agent handled the request to talk to a manager.",
+              "tools_triggered": "list_conversations, list_messages",
+              "expected_behavior": "Finds the dialog and summarizes it: the client ordered House Blend 250 g for $12, whole beans, with delivery to 12 Main St, Springfield. Then the client asked about an office order of 10 kg a month with a company invoice; the agent tagged the dialog 'wholesale' and handed it over to a manager."
+            },
+            {
+              "description": "Workspace 'Bluebird Coffee (demo)' connected with access 'Read and write'. Create an agent test case, run the test suite and report the results. Writes only to the demo workspace.",
+              "prompt": "Create a test case: a client asks how much the coffee subscription costs, and the agent must say it is 15% off the listed price with free delivery. Then run all test cases and show me the results.",
+              "tools_triggered": "create_agent_test, run_agent_tests, get_agent_test_job",
+              "expected_behavior": "The test case is created, the run starts, and once the job finishes the results are shown per test case with the agent's actual answers. The new test passes: the agent names 1 kg every 4 weeks at 15% off with free delivery."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Connecting messenger channels is not available through the plugin; it is done only in the ReplyBuddy dashboard. The plugin should not call a tool that changes channels and should point to the dashboard.",
+              "prompt": "Connect my WhatsApp number to the agent."
+            },
+            {
+              "description": "A general question unrelated to ReplyBuddy. The plugin should not be used.",
+              "prompt": "What is the weather in Paris today?"
+            },
+            {
+              "description": "Deleting a workspace is not available through the plugin. No ReplyBuddy tool should be called; the answer should say this is done only in the dashboard.",
+              "prompt": "Delete this workspace and all its data."
+            }
+          ]
+        }
+      },
+      "publication": {
+        "release_notes": "First public release. Set up, test and debug a ReplyBuddy AI agent for messengers, and work with its inbox and built-in CRM from ChatGPT and Codex."
+      }
+    }
   }
 }
