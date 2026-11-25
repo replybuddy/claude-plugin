@@ -18,7 +18,7 @@
     "shortDescription": "All-in-one AI + CRM platform",
     "longDescription": "ReplyBuddy is an AI agent that answers clients in messengers (Telegram, Instagram, MAX, Avito and Zalo), with a CRM built around it. This plugin connects the ReplyBuddy workspaces you choose, so you can set up the agent, check how it answers, find out why it answered the way it did, and work with its dialogs, contacts and deals. Five skills cover agent setup, sandbox testing, reply diagnosis, deal funnels, and integrations with your own backend through custom API skills, signed webhooks and API keys. You sign in with OAuth and pick the workspaces and the access level: read only, or read and write. Messenger channels are connected only in the ReplyBuddy dashboard.",
     "developerName": "ReplyBuddy",
-    "category": "Productivity",
+    "category": "Business & Operations",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://replybuddy.io",
     "supportURL": "https://github.com/replybuddy/claude-plugin/issues",
