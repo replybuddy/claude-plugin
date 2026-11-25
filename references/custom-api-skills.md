@@ -32,7 +32,7 @@ Rules the server checks:
 - Every `{placeholder}` in `url` needs a parameter with that name and `location: "path"`. Other locations: `query`, `body`, `header`.
 - A `{placeholder}` goes in the path or query, never in the host. A URL with `user:password@` is refused; use `authentication` instead.
 - `dataType`: `string` (default), `number`, `boolean`. `required` defaults to `true`.
-- `authentication`: `none` (default), `bearer`, `api_key` (header in `apiKeyHeader`, default `X-Api-Key`), `basic` (`basicUsername`). The key, token or password itself is entered by the user in the dashboard, see Secrets. Constant headers go to `fixedHeaders: [{"name", "value"}]`.
+- `authentication`: `none` (default), `bearer`, `api_key` (header in `apiKeyHeader`, default `X-Api-Key`), `basic` (`basicUsername`). Create the tool with `none`: the user then picks the authentication and enters the key, token or password in the dashboard, see Secrets. `bearer`, `api_key` or `basic` without a stored secret is refused with 422 `skill.invalid_config`. Constant headers go to `fixedHeaders: [{"name", "value"}]`.
 - JSON keys inside a tool are camelCase (`apiKeyHeader`, `dataType`, `fixedHeaders`).
 
 ## Secrets
@@ -43,7 +43,7 @@ Responses mask secrets as `******`. On `update_skill`, leave them as `******` or
 
 ## Testing a tool
 
-`test_custom_api_tool` sends one real request through a tool of a saved skill and returns the status, headers and body. Pass the skill `id`, the tool object as `connect_skill` or `list_skills` returned it (you may edit it before the test) and sample `arguments`. A `502 skill.test_request_failed` means the request did not get an answer from your API (DNS, TLS, timeout, or the address is not allowed); it is not a ReplyBuddy outage. Stored secrets are used on the server while the URL keeps the stored scheme and host. Private and internal addresses are refused; the limit is 20 calls per minute.
+`test_custom_api_tool` sends one real request through a tool of a saved skill and returns the status, headers and body. Pass the skill `id`, the tool object as `connect_skill` or `list_skills` returned it (you may edit it before the test) and sample `arguments`. A `502 skill.test_request_failed` means your API did not answer (connection, TLS or timeout); it is not a ReplyBuddy outage. A host that does not resolve, or a private or internal address, is refused with 422 `skill.invalid_config` before any request goes out. Stored secrets are used on the server while the URL keeps the stored scheme and host. Private and internal addresses are refused; the limit is 20 calls per minute.
 
 This is a real request to your API: test against a read-only endpoint or a staging backend when the call changes data.
 

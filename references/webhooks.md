@@ -75,11 +75,11 @@ printf '%s.' "$T" | cat - body.json | openssl dgst -sha256 -hmac "$SECRET"
 ## Retries and auto-disable
 
 - A non-2xx answer or a timeout is retried after 1 min, 5 min, 30 min, 2 h, 5 h, 10 h and 10 h: 8 attempts over about 28 hours, then the delivery is `failed`.
-- When a delivery fails for good and nothing got through to the endpoint since, the endpoint is disabled (`enabled: false`, `disabled_reason`). New events wait. `PUT /webhook-endpoints/{id}` with `{"enabled": true}` resumes them.
-- Delivery is at least once. An event may be lost only if the server crashes between saving the change and queueing the event.
+- When a delivery fails for good and nothing got through to the endpoint since, the endpoint is disabled (`enabled: false`, `disabled_reason`). Deliveries already queued wait; events that happen while it is disabled are not queued for it. `update_webhook_endpoint` with `enabled: true` resumes the queued ones.
+- Delivery is at least once for queued events. An event can be lost if the server crashes or the database fails right after the change, or while the endpoint is disabled. A new or re-enabled endpoint may miss events for up to 30 seconds.
 - The delivery log keeps 30 days.
 
-## Managing endpoints from Claude
+## Managing endpoints through MCP
 
 | Task | Call |
 |---|---|
