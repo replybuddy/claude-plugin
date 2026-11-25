@@ -13,10 +13,10 @@ A **deal** is a sale on a kanban board of a deal funnel. A conversation and its 
 
 ## Tasks
 
-Manager tasks have assignees and a due date. When the AI calls a person, the conversation gets a reply task, completed when someone answers or dismisses the mark.
+Manager tasks have assignees and a due date. When the AI calls a person, the conversation gets a «needs human» mark and a reply task. The task and the mark go away when a person answers in the dashboard or in the messenger app, completes the task, sets the work state to `done` (`update_conversation_work_state`) or calls `dismiss_conversation_needs_human`; a reply sent through MCP or an API key keeps them.
 
 - `list_tasks` lists tasks with filters, reply tasks and tasks the AI created included; `get_task_summary` counts open tasks by due group (overdue, today and so on). Without `funnel_id` both cover only the main funnel; tasks of another funnel need its `funnel_id`.
-- `create_task` needs `assignee` or `assignees` and either `due_preset` or `due_at`. On `update_task`, `assignees` replaces the whole list.
+- `create_task` needs `assignee` or `assignees` and either `due_preset` or `due_at`. A calendar `due_at` (`YYYY-MM-DD`) and `due_time` (`HH:MM`) are read in the deal settings timezone; `timezone` may be omitted. On `update_task`, `assignees` replaces the whole list.
 - `list_task_history` lists the changes of one task; `delete_task` deletes it.
 
 ## Funnel settings

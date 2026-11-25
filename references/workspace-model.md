@@ -7,7 +7,7 @@ A **workspace** is one AI agent together with its messenger channels, contacts, 
 | Part | What it is | Tools |
 |---|---|---|
 | Profile | `identity` (who the agent is, tone, language, rules), reply mode, reply quality, media and voice settings, restrictions | `get_workspace`, `update_workspace` |
-| Behavior sections | Short instructions, each up to 4000 characters: `formatting`, `message_split`, `reply_policy`, `handoff_notify` (when to notify a human but keep replying), `handoff_escalate` (when to stop and hand the dialog to a human), `followups` (how reminders sound and when to turn them off or on), `deals` (when to put a person on a stage) | `update_workspace` with `behavior: {...}`; only the sections you send change |
+| Behavior sections | Short instructions, each up to 4000 characters: `formatting`, `message_split`, `reply_policy`, `handoff_notify` (when to notify a human but keep replying), `handoff_escalate` (when to stop and hand the dialog to a human), `followups` (how reminders are written and after which client messages none follows; stages hold only the schedule, and only a person turns reminders off for a conversation, with `set_conversation_reminders`), `deals` (when to put a person on a stage) | `update_workspace` with `behavior: {...}`; only the sections you send change |
 | Knowledge | Documents the agent searches while answering. Each entry has `title`, `data` and `usage_prompt` (when to use it) | `list_knowledge`, `create_knowledge`, `update_knowledge`, `toggle_knowledge`, `reorder_knowledge`, `archive_knowledge`, `restore_knowledge` |
 | QA pairs | Exact answers or instructions for frequent questions | `list_qa`, `create_qa`, `update_qa`, `archive_qa`, `restore_qa` |
 | Skills | Actions the agent can take: `capture_question` (save questions it could not answer), `web_search`, `schedule_meeting` (Calendly or Google Calendar), `custom_api` (calls your HTTP API; several per workspace) | `list_skills`, `connect_skill`, `update_skill`, `toggle_skill`, `test_custom_api_tool` |
@@ -23,7 +23,7 @@ A **workspace** is one AI agent together with its messenger channels, contacts, 
 - The **incoming stage** («no deal» in the dashboard) holds dialogs without an open deal. It has AI settings like any other stage; `get_stage_catalog` lists it and `get_workspace_overview` counts it, `list_deal_stages` does not.
 - The `deals` behavior section tells the agent when to open a deal. While it is filled the AI may enter any open stage; a stage's `when_to_enter` narrows its own entry, and a `won` or `lost` stage is entered only by its own `when_to_enter`.
 - A stage is a processing status, not a request type: request types are tags plus QA instructions.
-- When the agent calls a person, the dialog gets a task «reply in dialog», completed when someone answers or dismisses the mark.
+- When the agent calls a person, the dialog gets a «needs human» mark and a task «reply in dialog». The task and the mark go away when a person answers in the dashboard or in the messenger app, completes the task, sets the work state to `done` (`update_conversation_work_state`) or calls `dismiss_conversation_needs_human`; a reply sent through MCP or an API key keeps them.
 
 ## Reply modes
 
