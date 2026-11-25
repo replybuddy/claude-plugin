@@ -1,6 +1,6 @@
 # Evals
 
-Three cases, each with its own mocks of the ReplyBuddy MCP server (`<case>/mocks/replybuddy/<tool>.md`), so no real workspace or sign-in is needed. Tool schemas (`_tools.json`), the `get_guide` webhooks section and the shape of each answer are recorded from the live server; workspace data in the mocks is made up.
+Three cases, each with its own mocks of the ReplyBuddy MCP server (`<case>/mocks/replybuddy/<tool>.md`), so no real workspace or sign-in is needed. Tool schemas (`_tools.json`) and the shape of each answer are copied from the live server, and `get_guide.md` is its webhooks section, abridged; workspace data in the mocks is made up.
 
 A mock answers the same way for any input, so a wrong id gets a normal answer instead of a 404, and graders check the id. Mocks do not serve the server's instructions.
 
